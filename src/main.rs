@@ -2,8 +2,9 @@ use std::{path::PathBuf, time::Duration};
 
 pub mod day_01;
 pub mod day_02;
+pub mod day_03;
 
-pub const SOLUTIONS: [Solution; 2] = [day_01::SOLUTION, day_02::SOLUTION];
+pub const SOLUTIONS: [Solution; 3] = [day_01::SOLUTION, day_02::SOLUTION, day_03::SOLUTION];
 
 pub fn main() {
     let Some(mut folder) = std::env::args().nth(1).map(PathBuf::from) else {

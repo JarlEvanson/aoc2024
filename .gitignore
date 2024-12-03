@@ -1,3 +1,8 @@
+# Ignore rust build files
 /target
 
+# Ignore inputs
 /input
+
+# Ignore cookie for downloads
+cookie.txt

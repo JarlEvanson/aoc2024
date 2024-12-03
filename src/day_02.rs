@@ -20,71 +20,68 @@ pub fn part_2(input: &str) -> usize {
 }
 
 pub fn both(input: &str) -> (usize, usize) {
-    input
-        .lines()
-        .fold((0, 0), |(part_1, part_2), report| {
-            let mut levels = get_levels(report);
+    input.lines().fold((0, 0), |(part_1, part_2), report| {
+        let mut levels = get_levels(report);
 
-            let mut prior_direction = Direction::Zero;
-            let mut prior_level = None;
+        let mut prior_direction = Direction::Zero;
+        let mut prior_level = None;
 
-            let mut prev_direction = Direction::Zero;
-            let mut prev_level = None;
+        let mut prev_direction = Direction::Zero;
+        let mut prev_level = None;
 
-            let mut current_direction = Direction::Zero;
-            let Some(mut curr_level) = levels.next() else {
-                return (part_1 + 1, part_2 + 1);
-            };
+        let mut current_direction = Direction::Zero;
+        let Some(mut curr_level) = levels.next() else {
+            return (part_1 + 1, part_2 + 1);
+        };
 
-            while let Some(next_level) = levels.next() {
-                let diff = next_level as isize - curr_level as isize;
+        while let Some(next_level) = levels.next() {
+            let diff = next_level as isize - curr_level as isize;
 
-                let distance = diff.abs();
-                let next_direction = Direction::from(diff);
+            let distance = diff.abs();
+            let next_direction = Direction::from(diff);
 
-                let distance_valid = 1 <= distance && distance <= 3;
-                let direction_valid =
-                    current_direction == Direction::Zero || next_direction == current_direction;
+            let distance_valid = 1 <= distance && distance <= 3;
+            let direction_valid =
+                current_direction == Direction::Zero || next_direction == current_direction;
 
-                if !distance_valid || !direction_valid {
-                    let mut valid = false;
+            if !distance_valid || !direction_valid {
+                let mut valid = false;
 
-                    // Skip `next_level`.
-                    valid =
-                        valid || check_report(levels.clone(), current_direction, Some(curr_level));
-                    // Skip `curr_level`.
-                    valid = valid
-                        || check_report(
-                            iter::once(next_level).chain(levels.clone()),
-                            prev_direction,
-                            prev_level,
-                        );
+                // Skip `next_level`.
+                valid = valid || check_report(levels.clone(), current_direction, Some(curr_level));
+                // Skip `curr_level`.
+                valid = valid
+                    || check_report(
+                        iter::once(next_level).chain(levels.clone()),
+                        prev_direction,
+                        prev_level,
+                    );
 
-                    // Skip `prev_level`.
-                    valid = valid
-                        || check_report(
-                            iter::once(curr_level)
-                                .chain(iter::once(next_level))
-                                .chain(levels.clone()),
-                            prior_direction,
-                            prior_level,
-                        );
+                // Skip `prev_level`.
+                valid = valid
+                    || check_report(
+                        iter::once(curr_level)
+                            .chain(iter::once(next_level))
+                            .chain(levels.clone()),
+                        prior_direction,
+                        prior_level,
+                    );
 
-                    return (part_1, part_2 + valid as usize);
-                }
-
-                prior_level = prev_level;
-                prior_direction = prev_direction;
-
-                prev_level = Some(curr_level);
-                prev_direction = current_direction;
-
-                curr_level = next_level;
-                current_direction = next_direction;
+                return (part_1, part_2 + valid as usize);
             }
 
-            (part_1 + 1, part_2 + 1)
-        })
+            prior_level = prev_level;
+            prior_direction = prev_direction;
+
+            prev_level = Some(curr_level);
+            prev_direction = current_direction;
+
+            curr_level = next_level;
+            current_direction = next_direction;
+        }
+
+        (part_1 + 1, part_2 + 1)
+    })
 }
 
 pub fn check_report(
