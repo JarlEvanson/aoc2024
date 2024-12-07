@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use fxhash::FxHashSet;
 
 use crate::{
     Solution,
@@ -44,8 +44,10 @@ pub fn part_1(input: &str) -> usize {
     };
     let mut direction = CardinalDirection::North;
 
+    let mut count = 0;
     loop {
         let value = grid.get_mut_signed(guard_pos.0, guard_pos.1).unwrap();
+        count += (*value != b'&') as usize;
         *value = b'&';
 
         let Some((new_pos, new_direction)) = guard_step(&grid, guard_pos, direction) else {
@@ -54,15 +56,6 @@ pub fn part_1(input: &str) -> usize {
 
         guard_pos = new_pos;
         direction = new_direction;
-    }
-
-    let mut count = 0;
-    for row in (0..grid.height).map(|row| grid.row(row).unwrap()) {
-        for &byte in row.iter() {
-            if byte == b'&' {
-                count += 1;
-            }
-        }
     }
 
     count
@@ -102,7 +95,7 @@ pub fn part_2(input: &str) -> usize {
     let start_direction = CardinalDirection::North;
 
     let mut count = 0;
-    let mut visited = HashSet::new();
+    let mut visited = FxHashSet::default();
     for (y, row) in (0..grid.height)
         .map(|row| grid.row(row).unwrap())
         .enumerate()
