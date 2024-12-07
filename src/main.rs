@@ -8,15 +8,17 @@ pub mod day_03;
 pub mod day_04;
 pub mod day_05;
 pub mod day_06;
+pub mod day_07;
 pub mod utils;
 
-pub const SOLUTIONS: [Solution; 6] = [
+pub const SOLUTIONS: [Solution; 7] = [
     day_01::SOLUTION,
     day_02::SOLUTION,
     day_03::SOLUTION,
     day_04::SOLUTION,
     day_05::SOLUTION,
     day_06::SOLUTION,
+    day_07::SOLUTION,
 ];
 
 pub fn main() {
